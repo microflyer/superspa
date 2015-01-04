@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A playground of AngularJS</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/libraries/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='/libraries/animate.css/animate.min.css' />
+    <script src="/libraries/jquery/dist/jquery.js"></script>  
+    <script src="/libraries/bootstrap/dist/js/bootstrap.js"></script>      
+    <script src="/libraries/angular/angular.js"></script>
+    <script src="/angular_playground/app.js"></script>
+  </head>
+  <body ng-app="playground">
+
+    <div ng-controller="revengeCtrl">
+      <input type="text" class="form-control" ng-model="searchText"/>
+      <table class="table table-bordered table-striped animated fadeIn">
+        <tr>
+          <th>Name</th>
+          <th>Character</th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="actor in avengers.cast | filter: searchText" class="">
+          <td>{{actor.name}}</td>
+          <td>{{actor.character}}</td>
+          <td><button class="btn btn-default" ng-click="remove($index)">Remove</button></td>
+        </tr>
+      </table>
+      <input type="text"  class="form-control" placeholder="input name here..." ng-model="actor.name"/>
+      <input type="text"  class="form-control" placeholder="input character here..." ng-model="actor.character"/>
+      <button class="btn btn-primary" ng-click="add(actor.name, actor.character)">Add New Actor</button>
+    </div>
+
+  </body>
+</html>
