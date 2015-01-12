@@ -6,12 +6,19 @@ angular.module('flapperNews').config(
 		.state('home', {
 			url: '/home',
 			templateUrl: '/home.html',
-			controller: 'mainCtrl'
+			controller: 'mainCtrl',
+			// need more knowledge to understand resolve here
+			resolve: { postPromise: ['posts', function (posts) {
+				return posts.getAll();
+			}]}
 		})
 		.state('posts', {
 			url: '/posts/{id}',
 			templateUrl: '/posts.html',
-			controller: 'postsCtrl'
+			controller: 'postsCtrl',
+			resolve: { post: ['$stateParams', 'posts', function ($stateParams, posts) {
+				return posts.get($stateParams.id);
+			}]}
 		});
 
 		$urlRouterProvider.otherwise('home');
@@ -25,45 +32,79 @@ angular.module('flapperNews').controller('mainCtrl', ['$scope', 'posts', functio
 			return;
 		}
 
-		$scope.posts.push({title: $scope.title, link: $scope.link, upvotes: 0});
+		posts.create({title: $scope.title, link: $scope.link})
+
 		$scope.title = '';
 		$scope.link = '';
 	};
 
 	$scope.incrementUpvotes = function (post) {
-		post.upvotes += 1;
+		posts.upvote(post);
 	};
-
-	$scope.posts.push({
-		title: $scope.title,
-		link: $scope.link,
-		upvotes: 0,
-		comments: [
-			{author: 'Joe', body: 'Cool post!', upvotes: 0},
-			{author: 'Bob', body: 'Great idea but everything is wrong!', upvotes: 0}
-	]});
-
 
 }]);
 
-angular.module('flapperNews').controller('postsCtrl', ['$scope', '$stateParams', 'posts', function ($scope, $stateParams, posts) {
-	$scope.post = posts.posts[$stateParams.id];
+angular.module('flapperNews').controller('postsCtrl', ['$scope', '$stateParams', 'posts', 'post', function ($scope, $stateParams, posts, post) {
+	// why can we inject post here? is it because we have it in the resolve object of state config?
+	$scope.post = post;
 	$scope.addComment = function () {
 		if ($scope.body === '') {
 			return;
 		}
 
-		$scope.post.comments.push({
+		posts.addComment(post._id, {
 			body: $scope.body,
 			author: 'user',
-			upvotes: 0
+		}).success(function (comment) {
+			$scope.post.comments.push(comment);
 		});
 
 		$scope.body = '';
 	};
+
+	$scope.incrementUpvotes = function (comment) {
+		posts.upvoteComment(post, comment);
+	}
 }]);
 
-angular.module('flapperNews').factory('posts', [function () {
-	var o = {posts: []};
+angular.module('flapperNews').factory('posts', ['$http', function ($http) {
+	var o = { posts: [] };
+
+	o.getAll = function () {
+		return $http.get('/posts').success(function (data) {
+			angular.copy(data, o.posts);
+		});
+	};
+
+	o.create = function (post) {
+		return $http.post('/posts', post).success(function (data) {
+			o.posts.push(data);
+		});
+	};
+
+	o.upvote = function (post) {
+		return $http.put('/posts/' + post._id + '/upvote').success(function (data) {
+			post.upvotes += 1;
+			//post.upvotes = data.upvotes
+		});
+	};
+
+	o.get = function (id) {
+		// why use then here? res.data?
+		return $http.get('/posts/' + id).then(function (res) {
+			return res.data;
+		});
+	};
+
+	o.addComment = function (id, comment) {
+		return $http.post('/posts/' + id + '/comments', comment);
+	};
+
+	o.upvoteComment = function (post, comment) {
+		return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote').success(function (data) {
+			comment.upvotes += 1;
+		});
+	};
+
 	return o;
 }]);
