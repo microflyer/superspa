@@ -5,8 +5,33 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/libraries/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/libraries/animate.css/animate.min.css' />
+    <script src="/libraries/angular/angular.js"></script>
+    <script src="/angular_playground/app.js"></script>
   </head>
-  <body>
+  <body ng-app="demoApp">
+
+    <div ng-controller="avengersCtrl">
+      <input type="text" class="form-control" ng-model="search.name" />
+      <br />
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>Name</th>
+          <th>Character</th>
+          <th>Action</th>
+        </tr>
+        <tr ng-repeat="actor in avengers.cast | filter:search">
+          <td>{{actor.name}}</td>
+          <td>{{actor.character}}</td>
+          <td><button class="btn btn-default" ng-click="removeActor($index)">Remove</button></td>
+        </tr>
+      </table>
+      <br />
+      <input type="text" class="form-control" ng-model="actor.name" placeholder="Please type actor name..."/>
+      <br />
+      <input type="text" class="form-control" ng-model="actor.character" placeholder="Please type character name..."/>
+      <br />
+      <button class="btn btn-default" ng-click="addNewActor(actor.name, actor.character)">Add New Actor</button>
+    </div>
 
   </body>
 </html>
