@@ -1,25 +1,84 @@
 var demoApp = angular.module('demoApp', []);
 
-demoApp.factory('data', [function () {
-  return {
-    message: ""
+demoApp.controller('RevengeCtrl', ['$scope', 'revengers', function ($scope, revengers) {
+  $scope.revengers = revengers;
+
+  $scope.remove = function (index) {
+    $scope.revengers.cast.splice(index, 1);
+  };
+
+  $scope.addActor = function (name, character) {
+    $scope.revengers.cast.push({name: name, character: character});
+    $scope.actor = {};
   };
 }]);
 
-demoApp.filter('reverse', function () {
-  return function (text) {
-    return text.split("").reverse().join("");
-  };
-});
 
-demoApp.controller('FirstCtrl', ['$scope', 'data', function ($scope, data) {
-  $scope.data = data;
-}]);
+demoApp.factory('revengers', function () {
+  var revengers = {};
+  revengers.cast = [
+{
+  name: 'Robert Downey Jr.',
+  character: 'Tony Stark / Iron Man'
+},
+{
+  name: 'Chris Evans',
+  character: 'Steve Rogers / Captain America'
+},
+{
+  name: 'Mark Ruffalo',
+  character: 'Bruce Banner / The Hulk'
+},
+{
+  name: 'Chris Hemsworth',
+  character: 'Thor'
+},
+{
+  name: 'Scarlett Johansson',
+  character: 'Natasha Romanoff / Black Widow'
+},
+{
+  name: 'Jeremy Renner',
+  character: 'Clint Barton / Hawkeye'
+},
+{
+  name: 'Tom Hiddleston',
+  character: 'Loki'
+},
+{
+  name: 'Clark Gregg',
+  character: 'Agent Phil Coulson'
+},
+{
+  name: 'Cobie Smulders',
+  character: 'Agent Maria Hill'
+},
+{
+  name: 'Stellan Skarsgård',
+  character: 'Selvig'
+},
+{
+  name: 'Samuel L. Jackson',
+  character: 'Nick Fury'
+},
+{
+  name: 'Gwyneth Paltrow',
+  character: 'Pepper Potts'
+},
+{
+  name: 'Paul Bettany',
+  character: 'Jarvis (voice)'
+},
+{
+  name: 'Alexis Denisof',
+  character: 'The Other'
+},
+{
+  name: 'Tina Benko',
+  character: 'NASA Scientist'
+}
+];
 
-demoApp.controller('SecondCtrl', ['$scope', 'data', function ($scope, data) {
-  $scope.data = data;
+return revengers;
 
-  $scope.reverseString = function (text) {
-    return text.split("").reverse().join("");
-  };
-}]);
+})
