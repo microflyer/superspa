@@ -2,16 +2,28 @@ var demoApp = angular.module("demoApp", ['ngRoute']);
 
 demoApp.config(function($routeProvider){
 	$routeProvider
-						.when('/map/:country/:state/:city', {
+						.when('/', {
 							templateUrl: 'angular_playground/views/index.html',
 							controller: 'MainCtrl'
-						});
+						})
+            .when('/computer/:brand/:model', {
+              redirectTo: function (routeParams, path, search) {
+                console.log(routeParams);
+                console.log(path);
+                console.log(search);
+                return '/' + routeParams.model;
+              }
+            })
+            .when('/iMac', {
+              template: 'iMac with Retina Screen!'
+            })
+            .otherwise({
+              redirectTo: '/'
+            });
 });
 
-demoApp.controller('MainCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
+demoApp.controller('MainCtrl', ['$scope', function ($scope) {
 	$scope.model = {
-		country: $routeParams.country,
-		state: $routeParams.state,
-		city: $routeParams.city
+    message: "Hello, Angular Route!"
 	};
 }]);
