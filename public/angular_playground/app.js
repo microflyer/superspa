@@ -4,26 +4,27 @@ demoApp.config(function($routeProvider){
 	$routeProvider
 						.when('/', {
 							templateUrl: 'angular_playground/views/index.html',
-							controller: 'MainCtrl'
+							controller: 'MainCtrl',
+              resolve: {username: function ($q, $timeout) {
+                var defered = $q.defer();
+
+                $timeout(function () {
+                  defered.resolve("Danny Jia");
+                }, 3000);
+
+                /*
+                return defered.promise.then(function (data) {
+                  return "Hello, " + data;
+                });
+                */
+
+                return defered.promise;
+              }}
 						})
-            .when('/computer/:brand/:model', {
-              redirectTo: function (routeParams, path, search) {
-                console.log(routeParams);
-                console.log(path);
-                console.log(search);
-                return '/' + routeParams.model;
-              }
-            })
-            .when('/iMac', {
-              template: 'iMac with Retina Screen!'
-            })
-            .otherwise({
-              redirectTo: '/'
-            });
 });
 
-demoApp.controller('MainCtrl', ['$scope', function ($scope) {
+demoApp.controller('MainCtrl', ['$scope', 'username', function ($scope, username) {
 	$scope.model = {
-    message: "Hello, Angular Route!"
+    message: username
 	};
 }]);
