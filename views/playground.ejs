@@ -5,8 +5,18 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/libraries/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='/libraries/animate.css/animate.min.css' />
-  </head>
-  <body>
+    <script src="/libraries/angular/angular.js"></script>
+    <script src="/angular_playground/app.js"></script>
 
+  </head>
+  <body ng-app="demoApp">
+    <div ng-controller="FirstCtrl">
+      <input type="text" class="form-control" ng-model="data.message" />
+      <h1 class="">{{data.message}}</h1>
+    </div>
+    <div ng-controller="SecondCtrl">
+      <input type="text" class="form-control" ng-model="data.message" />
+      <h1 class="">{{data.message | reverse}}</h1>
+    </div>
   </body>
 </html>
