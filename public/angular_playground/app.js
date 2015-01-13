@@ -2,16 +2,16 @@ var demoApp = angular.module("demoApp", ['ngRoute']);
 
 demoApp.config(function($routeProvider){
 	$routeProvider
-						.when('/', {
+						.when('/map/:country/:state/:city', {
 							templateUrl: 'angular_playground/views/index.html',
 							controller: 'MainCtrl'
-						})
-						.when('/pizza', {
-							template: 'Yum'
-						})
-						.otherwise({template: "This doesn't exist"});
+						});
 });
 
-demoApp.controller('MainCtrl', ['$scope', '$route', function ($scope, $route) {
-	$scope.model = {message: "Hello, Angular Route!"};
+demoApp.controller('MainCtrl', ['$scope', '$routeParams', function ($scope, $routeParams) {
+	$scope.model = {
+		country: $routeParams.country,
+		state: $routeParams.state,
+		city: $routeParams.city
+	};
 }]);
