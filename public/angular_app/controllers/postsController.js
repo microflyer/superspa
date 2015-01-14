@@ -1,4 +1,4 @@
-angular.module('awesomeNews').controller('postsCtrl', ['$scope', '$location', '$stateParams', 'posts', 'post', function ($scope, $location, $stateParams, posts, post) {
+angular.module('awesomeNews').controller('postsCtrl', ['$scope', '$location', '$routeParams', 'posts', 'post', function ($scope, $location, $routeParams, posts, post) {
   $scope.post = post;
   $scope.addComment = function () {
     if ($scope.body === '') {

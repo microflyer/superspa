@@ -1,1 +1,1 @@
-angular.module('awesomeNews', ['ui.router']);
+angular.module('awesomeNews', ['ngRoute']);
