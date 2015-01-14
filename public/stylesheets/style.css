@@ -1,1 +1,7 @@
-.glyphicon-thumbs-up { cursor:pointer } 
+.glyphicon-thumbs-up { cursor:pointer }
+
+div.page-header {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 36px;
+  color: #479D47;
+}
