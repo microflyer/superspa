@@ -8,10 +8,15 @@
     <script src="/libraries/jquery/dist/jquery.js"></script>
     <script src="/libraries/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/libraries/angular/angular.js"></script>
-    <script src="/libraries/angular-route/angular-route.js"></script>
     <script src="/angular_playground/app.js"></script>
   </head>
   <body ng-app="demoApp">
-    <ng-view></ng-view>
+    <div ng-controller="MainCtrl">
+      <button class="btn btn-primary" ng-click="getProducts()">Get Product</button>
+      <button class="btn btn-primary" ng-click="promiseChains()">Promise Chains</button>
+      <h1 class="bg-success">{{data.productName}}</h1>
+      <h1 class="bg-danger" ng-show="error">{{error}}</h1>
+      <h1 class="bg-primary" ng-repeat="message in data.messages">{{message}}</h1>
+    </div>
   </body>
 </html>
