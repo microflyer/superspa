@@ -4,41 +4,59 @@ demoApp.config(function($routeProvider){
 	$routeProvider
 						.when('/', {
 							templateUrl: 'angular_playground/views/index.html',
-							controller: 'MainCtrl',
-              resolve: {
-                loadData: mainCtrl.loadData,
-                prepData: mainCtrl.prepData
-              }
+							controller: 'MainCtrl'
 						})
+						.when('/pizza', {
+							template: '<h1>Pizza Page: {{pizzaName}}</h1><button class="btn btn-primary" ng-click="changeRoute()">Go Back</button>',
+							controller: 'PizzaCtrl',
+							resolve: {
+								pizzaName: function ($q) {
+									var defered = $q.defer();
+
+									//defered.reject("error occured fetching pizza name!");
+
+									defered.resolve();
+
+									return defered.promise;
+								}
+							}
+						});
 });
 
-var mainCtrl = demoApp.controller('MainCtrl', ['$scope', '$route', 'loadData', 'prepData',
-                                  function ($scope, $route, loadData, prepData) {
+demoApp.controller('MainCtrl', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 	$scope.model = {
     message: "Hello, Angular Route!"
 	};
 
-  console.log($route);
-  console.log(loadData);
-  console.log(prepData);
+	$scope.changeRoute = function () {
+		$location.path('/pizza');
+	};
+
+	$rootScope.$on('$routeChangeStart', function (event, current, previous) {
+		console.log("route change starts...");
+		console.log(event);
+		console.log(current);
+		console.log(previous);
+	});
+
+	$rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+		console.log("route change succeeded...");
+		console.log(event);
+		console.log(current);
+		console.log(previous);
+	})
+
+	$rootScope.$on('$routeChangeError', function(event, current, previous, rejectMsg) {
+		console.log("route change error...")
+		console.log(rejectMsg);
+	});
+
 }]);
 
-mainCtrl.loadData = function ($q, $timeout) {
-  var defered = $q.defer();
+demoApp.controller('PizzaCtrl', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 
-  $timeout(function () {
-    defered.resolve("load data from service");
-  }, 3000);
+	$scope.changeRoute = function () {
+		$location.path('/');
+	};
 
-  return defered.promise;
-}
-
-mainCtrl.prepData = function ($q, $timeout) {
-  var defered = $q.defer();
-
-  $timeout(function () {
-    defered.resolve("prep data from service");
-  }, 3000);
-
-  return defered.promise;
-}
+}]);
