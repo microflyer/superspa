@@ -1,99 +1,82 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.controller('MainCtrl', function ($scope, $q, $timeout) {
+demoApp.controller('MainCtrl', function ($scope, $q, $http) {
 
-	$scope.data = {};
-	$scope.error = "";
+	$scope.members = [];
 
-	var getPromise = function () {
-		var defered = $q.defer();
-
-		$timeout(function () {
-			defered.resolve("Macbook Pro with retina");
-		}, 3000);
-
-		/*
-		$timeout(function () {
-			defered.reject("Failed to get product name from service");
-		}, 2000);
-		*/
-
-		return defered.promise;
-
+	$scope.getMemberList = function() {
+		$http.get('/members')
+		.success(function (data, status, header, config) {
+			$scope.members = data;
+			console.log(data);
+			console.log(status);
+			console.log(header);
+			console.log(config);
+		})
+		.error(
+			function (data, status, header, config) {
+				console.log(data);
+				console.log(status);
+				console.log(header);
+				console.log(config);
+			}
+		);
 	};
 
-	$scope.getProducts = function () {
-		getPromise().then(
-			function (data) {
-				$scope.data.productName = data;
-			},
-			function (errorMsg) {
-				$scope.error = errorMsg;
-			});
+	$scope.createMember = function() {
+		$http.post('/members', {firstName: 'Guowei', lastName:'Li', department: 'ADM'})
+		.success(function (data, status, header, config) {
+			$scope.members.push(data);
+			console.log(data);
+			console.log(status);
+		})
+		.error(
+			function (data, status, header, config) {
+				console.log(data);
+				console.log(status);
+			}
+		);
 	};
 
+	$scope.updateMember = function() {
 
+		var lastAdded = $scope.members[$scope.members.length - 1];
+		lastAdded.firstName = "Lee";
 
-
-	var getA = function () {
-		var defered = $q.defer();
-
-		$timeout(function () {
-			defered.resolve("A is returned.");
-		}, 1500);
-
-		return defered.promise;
-	}
-
-	var getBbyA = function (a) {
-		var defered = $q.defer();
-
-		$timeout(function () {
-			defered.resolve("B is returned.");
-		}, 1500);
-
-		return defered.promise;
-	}
-
-	var getCbyB = function (b) {
-		var defered = $q.defer();
-
-		$timeout(function () {
-			defered.resolve("C is returned.");
-		}, 1500);
-
-		return defered.promise;
-	}
-
-	var getDbyC = function (c) {
-		var defered = $q.defer();
-
-		$timeout(function () {
-			defered.resolve("D is returned.");
-		}, 1500);
-
-		return defered.promise;
-	}
-
-	$scope.promiseChains = function () {
-
-		$scope.data.messages = [];
-
-		getA()
-		.then(function (data) {
-			$scope.data.messages.push(data + "Now getting B... ");
-			return getBbyA(data);
+		$http.put('/members')
+		.success(function (data, status, header, config) {
+			lastAdded = data;
+			console.log(data);
+			console.log(status);
 		})
-		.then(function (data) {
-			$scope.data.messages.push(data + "Now getting C... ");
-			return getCbyB(data);
+		.error(
+			function (data, status, header, config) {
+				console.log(data);
+				console.log(status);
+
+			}
+		);
+	};
+
+	$scope.deleteMember = function () {
+		var lastAdded = $scope.members[$scope.members.length - 1];
+		lastAdded.firstName = "Lee";
+
+		$http.delete('/members')
+		.success(function (data, status, header, config) {
+
+			$scope.members.splice($scope.members.length - 1, 1);
+
+			console.log(data);
+			console.log(status);
 		})
-		.then(function (data) {
-			$scope.data.messages.push(data + "Now getting D... ");
-			return getDbyC(data);
-		})
-		.then(function (data) {
-			$scope.data.messages.push(data);
-		})
+		.error(
+			function (data, status, header, config) {
+				console.log(data);
+				console.log(status);
+
+			}
+		);
 	}
+
 });

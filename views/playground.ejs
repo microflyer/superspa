@@ -12,11 +12,15 @@
   </head>
   <body ng-app="demoApp">
     <div ng-controller="MainCtrl">
-      <button class="btn btn-primary" ng-click="getProducts()">Get Product</button>
-      <button class="btn btn-primary" ng-click="promiseChains()">Promise Chains</button>
-      <h1 class="bg-success">{{data.productName}}</h1>
-      <h1 class="bg-danger" ng-show="error">{{error}}</h1>
-      <h1 class="bg-primary" ng-repeat="message in data.messages">{{message}}</h1>
+      <button class="btn btn-primary" ng-click="getMemberList()">Get Members</button>
+      <button class="btn btn-primary" ng-click="createMember()">Create Members</button>
+      <button class="btn btn-primary" ng-click="updateMember()">update Member</button>
+      <button class="btn btn-primary" ng-click="deleteMember()">delete Member</button>      
+
+      <div ng-repeat="member in members">
+        Name: {{member.firstName}} {{member.lastName}}
+        Dept: {{member.department}}
+      </div>
     </div>
   </body>
 </html>
