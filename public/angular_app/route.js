@@ -11,8 +11,8 @@ angular.module('awesomeNews').config(['$routeProvider', function ($routeProvider
     .when('/posts/:id', {
       templateUrl: '/angular_app/views/posts.html',
       controller: 'postsCtrl',
-      resolve: { post: ['$routeParams', 'posts', function ($routeParams, posts) {
-        return posts.get($routeParams.id);
+      resolve: { post: ['posts', '$route', function (posts, $route) {
+        return posts.get($route.current.params.id);
       }]}
     })
     .otherwise({redirectTo: '/home'});
