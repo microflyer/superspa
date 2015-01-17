@@ -5,7 +5,7 @@ demoApp.directive('enter', function() {
     restrict: 'A',
     link: function (scope, element) {
       element.bind("mouseenter", function () {
-        console.log("I'm inside of you!");
+        element.addClass("bg-primary");
       });
     }
   };
@@ -15,8 +15,10 @@ demoApp.directive('leave', function () {
   return {
     link: function (scope, element) {
       element.bind('mouseleave', function () {
-        console.log("I'm leavning on a jet plane");
-      })
+        element.removeClass("bg-primary");
+      });
     }
   };
 });
+
+// the next step would be using the attrs param to implement the same behaviors.
