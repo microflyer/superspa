@@ -1,24 +1,22 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.directive('enter', function() {
+demoApp.controller("MainCtrl", function ($scope) {
+  $scope.loadMoreTweets = function () {
+    alert('Loading tweets...');
+  };
+
+  $scope.deleteTweets = function () {
+    alert('Deleting tweets...');
+  };
+});
+
+demoApp.directive("enter", function () {
   return {
     restrict: 'A',
-    link: function (scope, element) {
-      element.bind("mouseenter", function () {
-        element.addClass("bg-primary");
+    link: function (scope, element, attrs) {
+      element.bind('mouseenter', function () {
+        scope.$apply(attrs.enter);
       });
     }
   };
 });
-
-demoApp.directive('leave', function () {
-  return {
-    link: function (scope, element) {
-      element.bind('mouseleave', function () {
-        element.removeClass("bg-primary");
-      });
-    }
-  };
-});
-
-// the next step would be using the attrs param to implement the same behaviors.
