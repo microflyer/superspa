@@ -1,19 +1,22 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.directive('superman', function() {
+demoApp.directive('enter', function() {
   return {
     restrict: 'A',
-    link: function () {
-      alert("I'm working stronger!")
+    link: function (scope, element) {
+      element.bind("mouseenter", function () {
+        console.log("I'm inside of you!");
+      });
     }
-  }
+  };
 });
 
-demoApp.directive('flash', function () {
+demoApp.directive('leave', function () {
   return {
-    restrict: "A",
-    link: function () {
-      alert("I'm working faster");
+    link: function (scope, element) {
+      element.bind('mouseleave', function () {
+        console.log("I'm leavning on a jet plane");
+      })
     }
-  }
+  };
 });
