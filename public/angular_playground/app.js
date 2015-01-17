@@ -1,8 +1,19 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.directive('superman', function () {
+demoApp.directive('superman', function() {
   return {
-    restrict: 'E',
-    template:'<h1>Here I am to save the day</h1>'
+    restrict: 'A',
+    link: function () {
+      alert("I'm working stronger!")
+    }
   }
-})
+});
+
+demoApp.directive('flash', function () {
+  return {
+    restrict: "A",
+    link: function () {
+      alert("I'm working faster");
+    }
+  }
+});
