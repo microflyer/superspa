@@ -1,14 +1,14 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.directive('panel', function () {
+demoApp.controller('MainCtrl', function ($scope) {
+  $scope.ctrlFlavor = "blackberry"
+})
+
+demoApp.directive('drink', function () {
   return {
-    restrict: "E",
-    transclude: true,
-    replace: true,
-    template: '<div class="alert alert-info ng-transclude" role="alert"></div>',
-
-    link: function (scope, element) {
-
-    }
-  };
-});
+    scope: {
+      flavor:"@"
+    },
+    template: '<h1>{{flavor}}</h1>'
+  }
+})

@@ -11,6 +11,8 @@
     <script src="/angular_playground/app.js"></script>
   </head>
   <body ng-app="demoApp">
-    <panel>Please put it in the panel.</panel>
+    <div ng-controller="MainCtrl">
+      <div drink flavor="{{ctrlFlavor}}"></div>
+    </div>
   </body>
 </html>
