@@ -7,8 +7,8 @@ demoApp.controller('MainCtrl', function ($scope) {
 demoApp.directive('drink', function () {
   return {
     scope: {
-      flavor:"@"
+      flavor:"="
     },
-    template: '<h1>{{flavor}}</h1>'
+    template: '<input class="form-control" type="text" ng-model="flavor">'
   }
 })

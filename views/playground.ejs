@@ -12,7 +12,12 @@
   </head>
   <body ng-app="demoApp">
     <div ng-controller="MainCtrl">
-      <div drink flavor="{{ctrlFlavor}}"></div>
+
+      From Controller:<br>
+      <input type="text" class="form-control" ng-model="ctrlFlavor">
+      <br>
+      From Directive:<br>
+      <div drink flavor="ctrlFlavor"></div>
     </div>
   </body>
 </html>
