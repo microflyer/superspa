@@ -10,7 +10,20 @@
     <script src="/libraries/angular/angular.js"></script>
     <script src="/angular_playground/app.js"></script>
   </head>
-  <body ng-app="demoApp">
-
+  <body ng-app="demoApp" ng-controller="MainCtrl">
+    <form>
+      <div class="form-group">
+        <label for="inputEmail">Email address</label>
+        <input type="email" ng-model="user.email" class="form-control" id="inputEmail" placeholder="Enter email">
+      </div>
+      <div class="form-group">
+        <label for="inputPassword">Password</label>
+        <input type="password" ng-model="user.password" class="form-control" id="inputPassword" placeholder="Password">
+      </div>
+      <p class="bg-warning" ng-repeat="message in messages">
+        message
+      </p>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
   </body>
 </html>
