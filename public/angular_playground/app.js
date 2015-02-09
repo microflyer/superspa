@@ -1,32 +1,54 @@
 var demoApp = angular.module("demoApp", []);
 
-demoApp.controller('ParentCtrl', function ($scope) {
-  $scope.messages = [];
-  $scope.text = "";
+demoApp.controller('AccountCtrl', function ($scope) {
 
-  $scope.sendMessage = function (text) {
-    $scope.$broadcast("messagefromparent", {source: "Parent", text: text});
-    $scope.text = "";
-  };
-
-  $scope.$on("messagefromChild", function (event, message) {
-    console.log(event);
-    $scope.messages.push(message);
-  })
 
 });
 
-demoApp.controller('ChildCtrl', function ($scope) {
-  $scope.messages = [];
-  $scope.text = "";
+demoApp.directive('confirmPassword', function () {
+  return {
+    require: 'ngModel',
+    scope: {
+      password: "@"
+    },
+    link: function (scope, element, attrs, ctrl) {
+      ctrl.$validators.confirmpassword = function(modelValue, viewValue) {
+        if (ctrl.$isEmpty(modelValue)) {
+          return true;
+        }
+        if (scope.password == modelValue) {
+          return true;
+        }
 
-  $scope.sendMessage = function (text) {
-    $scope.$emit("messagefromChild", {source: "Child", text: text});
-    $scope.text = "";
+        return false;
+      };
+    }
   };
+});
 
-  $scope.$on("messagefromparent", function (event, message) {
-    console.log(event);
-    $scope.messages.push(message);
-  })
+
+demoApp.directive('userNameChecker', function ($q, $timeout) {
+  return {
+    require: 'ngModel',
+    link: function (scope, element, attrs, ctrl) {
+      var userNames = ['Danny', 'Neil', 'Jill', 'Peter'];
+      ctrl.$asyncValidators.username = function (modelValue, viewValue) {
+        if (ctrl.$isEmpty(modelValue)) {
+          return $q.when();
+        }
+
+        var deferred = $q.defer();
+        $timeout(function () {
+          if (userNames.indexOf(modelValue) === -1) {
+            deferred.resolve();
+          }
+          else {
+            deferred.reject();
+          }
+        }, 2000);
+
+        return deferred.promise;
+      };
+    }
+  };
 });

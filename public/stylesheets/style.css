@@ -1,8 +1,17 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+div.username-exist {
+  color: #a94442;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+div.username-checking {
+  color: #337ab7;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.1;
 }
