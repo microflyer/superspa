@@ -1,54 +1,52 @@
+// AUTH_TOKEN is set from server after login.
+var AUTH_TOKEN = "Ajut9kGNByipqwABZ";
+//var AUTH_TOKEN = "";
+
 var demoApp = angular.module("demoApp", []);
 
-demoApp.controller('AccountCtrl', function ($scope) {
+demoApp.config(function ($httpProvider) {
 
+  console.log($httpProvider);
 
+  angular.forEach($httpProvider.defaults.transformRequest, function (value, index) {
+    console.log(value.toString());
+  });
+
+  angular.forEach($httpProvider.defaults.transformResponse, function (value, index) {
+    console.log(value.toString());
+  });
+
+  $httpProvider.interceptors.push("authInterceptor");
 });
 
-demoApp.directive('confirmPassword', function () {
-  return {
-    require: 'ngModel',
-    scope: {
-      password: "@"
-    },
-    link: function (scope, element, attrs, ctrl) {
-      ctrl.$validators.confirmpassword = function(modelValue, viewValue) {
-        if (ctrl.$isEmpty(modelValue)) {
-          return true;
-        }
-        if (scope.password == modelValue) {
-          return true;
-        }
+demoApp.controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
 
-        return false;
-      };
-    }
+  $scope.getPeople = function () {
+    $http.get('/people').success(
+      function (data) {
+        console.log(data)
+      }
+    ).error(function (data, status) {
+      console.log(data);
+      console.log(status);
+    });
+  };
+}]);
+
+demoApp.factory('authService', function () {
+  return {
+    isAuthorized: AUTH_TOKEN !== "",
+    authToken: AUTH_TOKEN,
   };
 });
 
-
-demoApp.directive('userNameChecker', function ($q, $timeout) {
+demoApp.factory('authInterceptor', function(authService) {
   return {
-    require: 'ngModel',
-    link: function (scope, element, attrs, ctrl) {
-      var userNames = ['Danny', 'Neil', 'Jill', 'Peter'];
-      ctrl.$asyncValidators.username = function (modelValue, viewValue) {
-        if (ctrl.$isEmpty(modelValue)) {
-          return $q.when();
-        }
-
-        var deferred = $q.defer();
-        $timeout(function () {
-          if (userNames.indexOf(modelValue) === -1) {
-            deferred.resolve();
-          }
-          else {
-            deferred.reject();
-          }
-        }, 2000);
-
-        return deferred.promise;
-      };
+    request: function (config) {
+      if (authService.isAuthorized) {
+        config.headers['authorizaion-token'] = authService.authToken;
+      }
+      return config;
     }
   };
 });
