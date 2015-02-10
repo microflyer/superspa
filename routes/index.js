@@ -27,8 +27,4 @@ router.get('/people', function (req, res, next) {
   }
 });
 
-router.post('/authorize', function (req, res, next) {
-  res.json({authorizaionToken: "Ajut9kGNByipqwABZ"});
-});
-
 module.exports = router;

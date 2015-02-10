@@ -1,3 +1,7 @@
+// AUTH_TOKEN is set from server after login.
+//var AUTH_TOKEN = "Ajut9kGNByipqwABZ";
+var AUTH_TOKEN = "";
+
 var demoApp = angular.module("demoApp", []);
 
 demoApp.config(function ($httpProvider) {
@@ -15,7 +19,7 @@ demoApp.config(function ($httpProvider) {
   $httpProvider.interceptors.push("authInterceptor");
 });
 
-demoApp.controller('MainCtrl', ['$scope', '$http', 'authService', function ($scope, $http, authService) {
+demoApp.controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.getPeople = function () {
     $http.get('/people').success(
@@ -27,28 +31,12 @@ demoApp.controller('MainCtrl', ['$scope', '$http', 'authService', function ($sco
       console.log(status);
     });
   };
-
-  $scope.authorizeUser = function () {
-    authService.authorize("username1", "password1");
-  };
 }]);
 
-demoApp.factory('authService', function ($q, $http) {
+demoApp.factory('authService', function () {
   return {
-    isAuthorized: false,
-    authToken: "",
-    authorize: function (username, password) {
-
-      var deferred = $q.defer();
-
-      $http.post('/authorize', {username: username, password: password}).success(function (data) {
-        this.isAuthorized = true;
-        this.authToken = data.authorizaionToken;
-        deferred.resolve();
-      });
-
-      return deferred.promise;
-    }
+    isAuthorized: AUTH_TOKEN !== "",
+    authToken: AUTH_TOKEN,
   };
 });
 
@@ -58,9 +46,7 @@ demoApp.factory('authInterceptor', function(authService) {
       if (authService.isAuthorized) {
         config.headers['authorizaion-token'] = authService.authToken;
       }
-
       return config;
-
     }
   };
 });
